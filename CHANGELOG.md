@@ -1,5 +1,11 @@
 # schemeit
 
+## 1.1.2
+
+### Patch Changes
+
+- 81d7363: fixed readme
+
 ## 1.1.1
 
 ### Patch Changes

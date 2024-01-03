@@ -1,5 +1,0 @@
----
-"schemeit": patch
----
-
-fixed readme
