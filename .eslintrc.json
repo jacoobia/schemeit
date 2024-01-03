@@ -1,0 +1,31 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": "standard-with-typescript",
+    "overrides": [
+    ],
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "rules": {
+        "quotes": ["error", "single"],
+        "semi": ["error", "always"],
+        "indent": ["error", 2],
+        "no-multi-spaces": ["error"],
+        "jsx-quotes": [2, "prefer-single"],
+        "@typescript-eslint/consistent-type-definitions": "off",
+        "@typescript-eslint/prefer-nullish-coalescing": "off",
+        "@typescript-eslint/strict-boolean-expressions": "off",
+        "@typescript-eslint/member-delimiter-style": "off",
+        "@typescript-eslint/consistent-type-imports": "off",
+        "@typescript-eslint/semi": "off",
+        "n/no-path-concat": "off",
+        "@typescript-eslint/no-confusing-void-expression": "off",
+        "@typescript-eslint/no-misused-promises": "off",
+        "no-return-await": "off",
+        "@typescript-eslint/return-await": "off"
+    }
+}
