@@ -14,7 +14,15 @@
     "type": "git",
     "url": "git+https://github.com/jacoobia/schemeit.git"
   },
-  "keywords": [],
+  "keywords": [
+    "expressjs",
+    "middleware",
+    "payload",
+    "schema",
+    "validator",
+    "simple",
+    "basic"
+  ],
   "author": "Jacoobia",
   "license": "MIT",
   "bugs": {
