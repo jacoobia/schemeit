@@ -1,5 +1,11 @@
 # schemeit
 
+## 1.1.1
+
+### Patch Changes
+
+- b396457: renamed import to new name
+
 ## 1.1.0
 
 ### Minor Changes
