@@ -1,5 +1,11 @@
 # schemeit
 
+## 1.0.0
+
+### Major Changes
+
+- 3d702e6: changed to use validator functions instead of objects to improve developer experience
+
 ## 0.1.1
 
 ### Patch Changes
