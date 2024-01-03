@@ -2,7 +2,7 @@
 
 # SchemeIt
 
-A lightweight express-js request validator, originally written for my personal projects and separated out into its own package for easier use.
+A lightweight express-js request payload validator, originally written for my personal projects and separated out into its own package for easier use.
 Schemeit will check individual elements against their chosen validators, ensure all non-optional elements are present in a payload and can also optionally enforce `noExtraElements` to prevent bloated payloads.
 
 ## Install

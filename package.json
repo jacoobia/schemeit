@@ -1,7 +1,7 @@
 {
   "name": "schemeit",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple & lightweight express-js request validator",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
