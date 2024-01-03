@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
-import { DataTypeValidator, ValidationError, Payload } from './@types/index';
+import { DataTypeValidator, ValidationError, Payload, ValidationFunction } from './@types/index';
 
 const extractPayload = (request: Request): Payload => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -14,6 +14,38 @@ const extractPayload = (request: Request): Payload => {
   }
 };
 
+/**
+ * Creates a validator function to be used in
+ * validators, automatically appends the optional state
+ * @param validateFunc The validator function
+ * @returns {ValidationFunction} validator function
+ */
+export const createValidator = (validateFunc: (object: unknown) => boolean): ValidationFunction => {
+  const validatorFunc = (): DataTypeValidator => ({ validate: validateFunc, optional: false });
+  validatorFunc.optional = (): DataTypeValidator => ({ validate: validateFunc, optional: true });
+  return validatorFunc;
+};
+
+/**
+ * Default validator, validates a string
+ */
+export const StringValidator = createValidator((object) => typeof object === 'string');
+/**
+ * Default validator, validates a number
+ */
+export const NumberValidator = createValidator((object) => typeof object === 'number');
+/**
+ * Default validator, validates a boolean
+ */
+export const BooleanValidator = createValidator((object) => typeof object === 'boolean');
+
+/**
+ * Creates an express middleware that will validate the payload of
+ * a HTTP request, it's method agnostic so does not discriminate between
+ * body/query/params.
+ * @param validators The validation rules to follow
+ * @returns {RequestHandler} An express middleware
+ */
 export const validator = (validators: Record<string, DataTypeValidator>): RequestHandler => {
   return (request: Request, response: Response, next: NextFunction) => {
     const errors: ValidationError = {};
