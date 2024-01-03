@@ -17,7 +17,7 @@ The following is a basic example usage of schemeit to build a validator middlewa
 
 ```
 import express from "express";
-import { NumberValidator, StringValidator, validator } from 'schemeit';
+import validator, { NumberValidator, StringValidator } from 'schemeit';
 
 const app = express();
 
