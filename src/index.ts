@@ -1,5 +1,11 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
-import { DataTypeValidator, ValidationError, Payload, ValidationFunction } from './@types/index';
+import {
+  DataTypeValidator,
+  ValidationError,
+  Payload,
+  ValidationFunction,
+  ValidatorOptions
+} from './@types/index';
 
 const extractPayload = (request: Request): Payload => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -46,7 +52,10 @@ export const BooleanValidator = createValidator((object) => typeof object === 'b
  * @param validators The validation rules to follow
  * @returns {RequestHandler} An express middleware
  */
-export const validator = (validators: Record<string, DataTypeValidator>): RequestHandler => {
+export const validator = (
+  validators: Record<string, DataTypeValidator>,
+  options?: ValidatorOptions
+): RequestHandler => {
   return (request: Request, response: Response, next: NextFunction) => {
     const errors: ValidationError = {};
     const payload: Payload = extractPayload(request);
@@ -60,12 +69,21 @@ export const validator = (validators: Record<string, DataTypeValidator>): Reques
           errors[key] = 'Required element is missing or undefined';
         }
       } else if (!validator.validate(value)) {
-        errors[key] = 'Invalid type';
+        errors[key] = 'Invalid type: expected';
+      }
+    }
+
+    if (options?.noExtraElements) {
+      for (const key in payload) {
+        if (!validators[key]) {
+          errors[key] = 'Element does not exist in validator';
+        }
       }
     }
 
     if (Object.keys(errors).length) {
-      return response.status(400).json({ errors });
+      const errorResponseKey = options?.errorListName ? options.errorListName : 'errors';
+      return response.status(400).json({ [errorResponseKey]: errors });
     }
 
     next();
