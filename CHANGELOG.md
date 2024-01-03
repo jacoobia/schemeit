@@ -1,5 +1,11 @@
 # schemeit
 
+## 1.1.0
+
+### Minor Changes
+
+- ce8bdef: added options and updated readme
+
 ## 1.0.0
 
 ### Major Changes
