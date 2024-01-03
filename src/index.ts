@@ -1,13 +1,27 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
-import { DataTypeValidator, ValidationError } from './@types/index';
+import { DataTypeValidator, ValidationError, Payload } from './@types/index';
+
+const extractPayload = (request: Request): Payload => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  if (Object.keys(request.body).length > 0) {
+    return request.body;
+  } else if (Object.keys(request.query).length > 0) {
+    return request.query;
+  } else if (Object.keys(request.params).length > 0) {
+    return request.params;
+  } else {
+    return null;
+  }
+};
 
 export const validator = (validators: Record<string, DataTypeValidator>): RequestHandler => {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (request: Request, response: Response, next: NextFunction) => {
     const errors: ValidationError = {};
+    const payload: Payload = extractPayload(request);
 
     for (const key in validators) {
       const validator = validators[key];
-      const value = req.body[key];
+      const value = payload[key];
 
       if (value === undefined) {
         if (!validator.optional) {
@@ -19,7 +33,7 @@ export const validator = (validators: Record<string, DataTypeValidator>): Reques
     }
 
     if (Object.keys(errors).length) {
-      return res.status(400).json({ errors });
+      return response.status(400).json({ errors });
     }
 
     next();

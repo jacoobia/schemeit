@@ -4,6 +4,7 @@ export type DataTypeValidator = {
 };
 
 export type ValidationError = Record<string, string>;
+export type Payload = Record<string, any> | null;
 
 export const StringValidator: DataTypeValidator = {
   validate(object: unknown): object is string {
