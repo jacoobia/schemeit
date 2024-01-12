@@ -17,11 +17,11 @@ The following is a basic example usage of schemeit to build a validator middlewa
 
 ```
 import express from "express";
-import validator, { NumberValidator, StringValidator } from 'schemeit';
+import createValidator, { NumberValidator, StringValidator } from 'schemeit';
 
 const app = express();
 
-const testValidator = validator({
+const testValidator = createValidator({
   name: StringValidator(),
   age: NumberValidator.optional()
 });
@@ -34,12 +34,12 @@ app.listen(3000);
 
 ```
 
-You can also use the exported function `createValidator` to create your own validation function with custom rules like so:
+You can also use the exported function `objectValidator` to create your own validation function with custom rules and optinally an error message like so:
 
 ```
-const SpecificStringValidator: ValidationFunction = createValidator((object: unknown) => {
+const SpecificStringValidator: ValidationFunction = objectValidator((object: unknown) => {
   return object === 'foo' || object === 'bar';
-});
+}, 'Invalid type, should be foo or bar!');
 ```
 
 ## Validator Options
