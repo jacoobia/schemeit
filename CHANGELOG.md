@@ -1,5 +1,11 @@
 # schemeit
 
+## 1.2.0
+
+### Minor Changes
+
+- e33376b: minor refactor and expanded on element validation with optional returns
+
 ## 1.1.2
 
 ### Patch Changes
