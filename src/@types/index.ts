@@ -1,6 +1,7 @@
-export type DataTypeValidator = {
+export type ElementValidator = {
   validate: (object: unknown) => boolean;
   optional?: boolean;
+  message?: string;
 };
 
 export type ValidatorOptions = {
@@ -8,6 +9,6 @@ export type ValidatorOptions = {
   errorListName?: string;
 };
 
-export type ValidationFunction = (() => DataTypeValidator) & { optional: () => DataTypeValidator };
+export type ValidatorFunction = (() => ElementValidator) & { optional: () => ElementValidator };
 export type ValidationError = Record<string, string>;
 export type Payload = Record<string, any> | null;

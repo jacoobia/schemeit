@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 import {
-  DataTypeValidator,
+  ElementValidator,
   ValidationError,
   Payload,
-  ValidationFunction,
+  ValidatorFunction,
   ValidatorOptions
 } from './@types/index';
 
@@ -26,24 +26,46 @@ const extractPayload = (request: Request): Payload => {
  * @param validateFunc The validator function
  * @returns {ValidationFunction} validator function
  */
-export const createValidator = (validateFunc: (object: unknown) => boolean): ValidationFunction => {
-  const validatorFunc = (): DataTypeValidator => ({ validate: validateFunc, optional: false });
-  validatorFunc.optional = (): DataTypeValidator => ({ validate: validateFunc, optional: true });
+export const objectValidator = (
+  validateFunc: (object: unknown) => boolean,
+  errorMessage?: string
+): ValidatorFunction => {
+  const validatorFunc = (): ElementValidator => ({
+    validate: (object) => validateFunc(object),
+    message: errorMessage,
+    optional: false
+  });
+
+  validatorFunc.optional = (): ElementValidator => ({
+    validate: (object) => object === undefined || validateFunc(object),
+    message: errorMessage,
+    optional: true
+  });
+
   return validatorFunc;
 };
 
 /**
  * Default validator, validates a string
  */
-export const StringValidator = createValidator((object) => typeof object === 'string');
+export const StringValidator = objectValidator(
+  (object) => typeof object === 'string',
+  'Invalid type, expected a string'
+);
 /**
  * Default validator, validates a number
  */
-export const NumberValidator = createValidator((object) => typeof object === 'number');
+export const NumberValidator = objectValidator(
+  (object) => typeof object === 'number',
+  'Invalid type, expected a number'
+);
 /**
  * Default validator, validates a boolean
  */
-export const BooleanValidator = createValidator((object) => typeof object === 'boolean');
+export const BooleanValidator = objectValidator(
+  (object) => typeof object === 'boolean',
+  'Invalid type, expected a boolean'
+);
 
 /**
  * Creates an express middleware that will validate the payload of
@@ -52,8 +74,8 @@ export const BooleanValidator = createValidator((object) => typeof object === 'b
  * @param validators The validation rules to follow
  * @returns {RequestHandler} An express middleware
  */
-export const validator = (
-  validators: Record<string, DataTypeValidator>,
+const createValidator = (
+  validators: Record<string, ElementValidator>,
   options?: ValidatorOptions
 ): RequestHandler => {
   return (request: Request, response: Response, next: NextFunction) => {
@@ -69,7 +91,7 @@ export const validator = (
           errors[key] = 'Required element is missing or undefined';
         }
       } else if (!validator.validate(value)) {
-        errors[key] = 'Invalid type: expected';
+        errors[key] = validator.message ?? 'Invalid type';
       }
     }
 
@@ -90,5 +112,5 @@ export const validator = (
   };
 };
 
-export default validator;
+export default createValidator;
 export * from './@types/index';
